@@ -1,0 +1,15 @@
+.vscode/
+.cache/
+build/
+
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
+*.log
+*.tmp
+
+.DS_Store
+Thumbs.db
