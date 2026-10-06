@@ -11,3 +11,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(main
     src/main.cpp
 )
+
+target_compile_options(main PRIVATE
+    -g3
+    -O0
+    -Wall
+    -Wextra
+    -fno-omit-frame-pointer
+    -D_GLIBCXX_ASSERTIONS
+)
