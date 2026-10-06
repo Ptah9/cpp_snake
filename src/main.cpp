@@ -1,13 +1,16 @@
-#define frame vector<vector<RGB>>
 #include <iostream>
+#include <linux/limits.h>
 #include <vector>
 using namespace std;
-
 struct RGB {
     int r;
     int g;
     int b;
 };
+
+
+using Frame = std::vector<std::vector<RGB>>;
+using Board = std::vector<std::vector<char>>;
 
 
 
@@ -29,17 +32,51 @@ void oneMorePixel() {
     cout << "  ";
 }
 
-void drawFrame(frame frameSheme){
+void drawFrame(Frame frameScheme){
     cout << "\033[?25l"; // скрыть курсор
-    for(int y = 0; y < frameSheme.size(); y++){
-        for(int x = 0; x < frameSheme[y].size(); x++){
-            printPixel(frameSheme[y][x]);
+    for(int y = 0; y < frameScheme.size(); y++){
+        for(int x = 0; x < frameScheme[y].size(); x++){
+            printPixel(frameScheme[y][x]);
         }
         cout << "\033[0m\n";
     }
     cout << "\033[0m\033[?25h\n"; // вернуть курсор
 }
 
+Frame makeBoardFrame(Board gameBoard){
+    const RGB black {0,0,0}; 
+    const RGB gray {128,128, 128}; 
+    const RGB red {255,0,0}; 
+    const RGB green {0,255,0}; 
+    const RGB blue {0,0,255}; 
+    const RGB purpNeon {191,0,255};
+    Frame boardFrame;
+    for(int y = 0; y < gameBoard.size(); y++){
+        boardFrame.push_back({});
+        for(int x = 0; x < gameBoard[y].size(); x++){
+            switch (gameBoard[y][x]) {
+                case '0':
+                    boardFrame[y].push_back(black);
+                    break;
+                case 'w':
+                    boardFrame[y].push_back(gray);
+                    break;
+                case 'f':
+                    boardFrame[y].push_back(red);
+                    break;
+                case 'S':
+                    boardFrame[y].push_back(blue);
+                    break;
+                case 's':
+                    boardFrame[y].push_back(green);
+                    break; 
+                default:
+                    boardFrame[y].push_back(purpNeon);
+            }
+        }
+    }
+    return boardFrame;
+}
 
 
 int main() {
@@ -48,7 +85,7 @@ int main() {
     RGB w{256,255,255};
     RGB b{0,0,0};
 
-    frame cpaseInvadersEnemy = {
+    Frame cpaseInvadersEnemy = {
         {w, w, w, b, b, b, w, w, w, w, w, w, w, w, b, b, b, w, w, w},
         {w, w, w, b, p, b, b, b, b, w, w, b, b, b, b, p, b, w, w, w},
         {w, w, b, b, b, b, b, p, b, w, w, b, p, b, b, b, b, b, w, w},
@@ -70,13 +107,25 @@ int main() {
 
     // 0 - пустота
     // w - стена
-    // p - еда
+    // f - еда
     // S - голова змейки
     // s - тело змейки
-    // vector<vector<char>> gameBoard = {};
-    char a = 'S';
-    char f = 's';
-    cout << a << f;
+    Board gameBoard = {
+        {'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'w'},
+        {'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'}
+    };
+
+    drawFrame(makeBoardFrame(gameBoard));
 
 
 
